@@ -1,3 +1,4 @@
+from turtle import done
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
@@ -191,24 +192,52 @@ with tab_eda:
 
     st.plotly_chart(bar_fig)
 
-    # show donut chart
-
-    # donut_fig = go.Figure()
-
+    # create donut chart
+    # donut_fig = make_subplots(rows=1, cols=2, specs=[[{'type': 'domain'}, {'type': 'domain'}]])
+    
     # donut_fig.add_trace(go.Pie(
-    #     labels=['Surplus', 'Defisit'],
-    #     values=[len(surplus_data), len(defisit_data)],
-    #     marker_colors=['darkgreen', 'yellow'],
-    #     textinfo='label+percent',
-    #     textposition='inside',
-    #     hole=.3
-    # ))
-
-    # donut_fig.update_layout(
-    #     title=f"Persentase Surplus dan Defisit {indicator} {year[0]} - {year[-1]}"
-    # )
-
-    # st.plotly_chart(donut_fig)
+    #     labels=defisit_data['Bulan-Tahun'].apply(lambda x: x.year),
+    #     values=defisit_data['Neraca Perdagangan'],
+    #     name='Defisit',
+    #     hovertemplate='<b>Tahun %{label}</b><br>' +
+    #     '<i>Nilai Neraca Perdagangan</i>: $%{value:.2f} <br>' +
+    #     '<i>Bulan</i>: ' +
+    #     defisit_data['Bulan-Tahun'].apply(lambda x: x.strftime('%B')) + '<br>'
+    # ), 1, 1)
+    
+    # if len(surplus_data) > 0:
+    #     donut_fig.add_trace(go.Pie(
+    #         labels=surplus_data['Bulan-Tahun'].apply(lambda x: x.year),
+    #         values=surplus_data['Neraca Perdagangan'],
+    #         name='Surplus',
+    #         hovertemplate='<b>Tahun %{label}</b><br>' +
+    #         '<i>Nilai Neraca Perdagangan</i>: $%{value:.2f} <br>' +
+    #         '<i>Bulan</i>: ' +
+    #         surplus_data['Bulan-Tahun'].apply(
+    #             lambda x: x.strftime('%B')) + '<br>'
+    #     ), 1, 2)
+    
+    # only create surplus donut chart
+    donut_fig = go.Figure()
+    
+    donut_fig.add_trace(go.Pie(
+        labels=surplus_data['Bulan-Tahun'].apply(lambda x: x.year),
+        values=surplus_data['Neraca Perdagangan'],
+        name='Surplus',
+        hovertemplate='<b>Tahun %{label}</b><br>' +
+        '<i>Nilai Neraca Perdagangan</i>: $%{value:.2f} <br>' +
+        '<i>Bulan</i>: ' +
+        surplus_data['Bulan-Tahun'].apply(
+            lambda x: x.strftime('%B')) + '<br>'
+    ))
+        
+    donut_fig.update_layout(
+        title_text=f"Donut Plot {indicator} {year[0]} - {year[-1]}",
+        annotations=[dict(text='Surplus', x=0.5, y=0.5, font_size=20, showarrow=False)])
+    
+    donut_fig.update_traces(hole=.4, hoverinfo="label+percent+name")
+    
+    st.plotly_chart(donut_fig)
 
 with tab_model:
 
