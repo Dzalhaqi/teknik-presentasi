@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from pyFTS.benchmarks import Measures
 from pyFTS.partitioners import Grid
 from pyFTS.models import chen
+from plotly.subplots import make_subplots
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -130,29 +131,29 @@ with tab_eda:
               lambda x: x.strftime('%B')) + '<br>'
       ))
 
-    # Customize the layout
-    fig.update_layout(
-        title=f"Bar Plot {indicator} {choosen_year}",
-        xaxis_title='Bulan',
-        yaxis_title='Nilai Neraca Perdagangan',
-        xaxis=dict(
-            tickmode='array',
-            tickvals=list(range(1, 13)),
-            ticktext=['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
-        )
-    )
+      # Customize the layout
+      fig.update_layout(
+          title=f"Bar Plot {indicator} {choosen_year}",
+          xaxis_title='Bulan',
+          yaxis_title='Nilai Neraca Perdagangan',
+          xaxis=dict(
+              tickmode='array',
+              tickvals=list(range(1, 13)),
+              ticktext=['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+          )
+      )
 
-    st.plotly_chart(fig)
+      st.plotly_chart(fig)
 
   else:
     # show all surplus and defisit data in every year
     surplus_data = data_bulanan_ei[data_bulanan_ei["Neraca Perdagangan"] > 0]
     defisit_data = data_bulanan_ei[data_bulanan_ei["Neraca Perdagangan"] < 0]
 
-    fig = go.Figure()
+    bar_fig = go.Figure()
 
-    fig.add_trace(go.Bar(
+    bar_fig.add_trace(go.Bar(
         x=defisit_data['Bulan-Tahun'].apply(lambda x: x.year),
         y=defisit_data['Neraca Perdagangan'],
         name='Defisit',
@@ -164,7 +165,7 @@ with tab_eda:
     ))
 
     if len(surplus_data) > 0:
-      fig.add_trace(go.Bar(
+      bar_fig.add_trace(go.Bar(
           x=surplus_data['Bulan-Tahun'].apply(lambda x: x.year),
           y=surplus_data['Neraca Perdagangan'],
           name='Surplus',
@@ -177,7 +178,7 @@ with tab_eda:
       ))
 
     # Customize the layout
-    fig.update_layout(
+    bar_fig.update_layout(
         title=f"Bar Plot {indicator} {year[0]} - {year[-1]}",
         xaxis_title='Tahun',
         yaxis_title='Nilai Neraca Perdagangan',
@@ -188,19 +189,26 @@ with tab_eda:
         )
     )
 
-    st.plotly_chart(fig)
+    st.plotly_chart(bar_fig)
 
-    # make pie chart
+    # show donut chart
 
-    # show all surplus and defisit data in every year
-    surplus_data = data_bulanan_ei[data_bulanan_ei["Neraca Perdagangan"] > 0]
-    defisit_data = data_bulanan_ei[data_bulanan_ei["Neraca Perdagangan"] < 0]
+    # donut_fig = go.Figure()
 
-    # make pie chart
-    fig = px.pie(data_bulanan_ei, values='Neraca Perdagangan',
-                 names='Bulan-Tahun', title='Pie Chart Neraca Perdagangan Indonesia')
+    # donut_fig.add_trace(go.Pie(
+    #     labels=['Surplus', 'Defisit'],
+    #     values=[len(surplus_data), len(defisit_data)],
+    #     marker_colors=['darkgreen', 'yellow'],
+    #     textinfo='label+percent',
+    #     textposition='inside',
+    #     hole=.3
+    # ))
 
-    st.plotly_chart(fig)
+    # donut_fig.update_layout(
+    #     title=f"Persentase Surplus dan Defisit {indicator} {year[0]} - {year[-1]}"
+    # )
+
+    # st.plotly_chart(donut_fig)
 
 with tab_model:
 
@@ -365,5 +373,5 @@ with tab_model:
       data_fts_result['actual'], data_fts_result['prediction'])
 
   st.code(f"""
-  RMSE: {rmse} 
-  MAPE: {mape}""")
+    RMSE: {rmse} 
+    MAPE: {mape}""")
