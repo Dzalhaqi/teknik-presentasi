@@ -192,32 +192,6 @@ with tab_eda:
 
     st.plotly_chart(bar_fig)
 
-    # create donut chart
-    # donut_fig = make_subplots(rows=1, cols=2, specs=[[{'type': 'domain'}, {'type': 'domain'}]])
-    
-    # donut_fig.add_trace(go.Pie(
-    #     labels=defisit_data['Bulan-Tahun'].apply(lambda x: x.year),
-    #     values=defisit_data['Neraca Perdagangan'],
-    #     name='Defisit',
-    #     hovertemplate='<b>Tahun %{label}</b><br>' +
-    #     '<i>Nilai Neraca Perdagangan</i>: $%{value:.2f} <br>' +
-    #     '<i>Bulan</i>: ' +
-    #     defisit_data['Bulan-Tahun'].apply(lambda x: x.strftime('%B')) + '<br>'
-    # ), 1, 1)
-    
-    # if len(surplus_data) > 0:
-    #     donut_fig.add_trace(go.Pie(
-    #         labels=surplus_data['Bulan-Tahun'].apply(lambda x: x.year),
-    #         values=surplus_data['Neraca Perdagangan'],
-    #         name='Surplus',
-    #         hovertemplate='<b>Tahun %{label}</b><br>' +
-    #         '<i>Nilai Neraca Perdagangan</i>: $%{value:.2f} <br>' +
-    #         '<i>Bulan</i>: ' +
-    #         surplus_data['Bulan-Tahun'].apply(
-    #             lambda x: x.strftime('%B')) + '<br>'
-    #     ), 1, 2)
-    
-    # only create surplus donut chart
     donut_fig = go.Figure()
     
     donut_fig.add_trace(go.Pie(
